@@ -7,7 +7,6 @@ import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
 import java.io.StringReader;
-import java.net.URL;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.core.IsEqual.equalTo;
@@ -19,11 +18,12 @@ public class CustomerTest {
 
     private Customer dinsdale = new Customer("Dinsdale Pirhana");
 
-    private Movie python = new Movie("Monty Python and the Holy Grail", Movie.REGULAR);
-	private Movie ran = new Movie("Ran", Movie.REGULAR);
-	private Movie la = new Movie("LA Confidential", Movie.NEW_RELEASE);
-	private Movie trek = new Movie("Star Trek 13.2", Movie.NEW_RELEASE);
-	private Movie wallace = new Movie("Wallace and Gromit", Movie.CHILDRENS);
+
+	private RegularMovie python =new RegularMovie("Monty Python and the Holy Grail");
+	private RegularMovie ran =new RegularMovie("Ran");
+	private NewReleaseMovie la =new NewReleaseMovie("LA Confidential");
+	private NewReleaseMovie trek=new NewReleaseMovie("Star Trek 13.2");
+	private ChildrenMovie wallace=new ChildrenMovie("Wallace and Gromit");
 
     @BeforeEach
     public void setUpData(){
@@ -46,8 +46,11 @@ public class CustomerTest {
     }
 
     @Test
-    public void shouldOutputChangedStatement() throws Exception {
-        la.setPriceCode(Movie.REGULAR);
+    public void should_Output_Changed_Statement() throws Exception {
+        RegularMovie regularLa = new RegularMovie(la.getTitle());
+
+        dinsdale.replaceRental(dinsdale.getRental(2),new Rental(regularLa,2));
+
         verifyOutput(dinsdale.statement(), "outputChange");
     }
 
@@ -56,7 +59,7 @@ public class CustomerTest {
         verifyOutput("1st Output", "outputHtml", dinsdale.htmlStatement());
     }
     */
-    	
+
     protected void verifyOutput(String actualValue, String fileName) throws IOException{
         String filePath = getClass().getClassLoader().getResource(GOLD_PATH + fileName).getPath();
         BufferedReader file = new BufferedReader (new FileReader (filePath));
