@@ -1,6 +1,11 @@
 package com.twu.refactoring;
 
+import java.util.Arrays;
+import java.util.function.IntPredicate;
+
 public class NumberCruncher {
+    public static final int EVEN = 0;
+    public static final int ODD = 1;
     private final int[] numbers;
 
     public NumberCruncher(int... numbers) {
@@ -8,34 +13,24 @@ public class NumberCruncher {
     }
 
     public int countEven() {
-        int count = 0;
-        for (int number : numbers) {
-            if (number % 2 == 0) count++;
-        }
-        return count;
+        return getCount(EVEN);
     }
 
     public int countOdd() {
-        int count = 0;
-        for (int number : numbers) {
-            if (number % 2 == 1) count++;
-        }
-        return count;
+        return getCount(ODD);
     }
 
+    private int getCount(int oddOrEven) {
+        return (int) Arrays.stream(numbers).filter(value -> value % 2 == oddOrEven).count();
+    }
+
+
     public int countPositive() {
-        int count = 0;
-        for (int number : numbers) {
-            if (number >= 0) count++;
-        }
-        return count;
+        return (int) Arrays.stream(numbers).filter(value -> value >= 0).count();
     }
 
     public int countNegative() {
-        int count = 0;
-        for (int number : numbers) {
-            if (number < 0) count++;
-        }
-        return count;
+        return (int) Arrays.stream(numbers).filter(value -> value < 0).count();
+
     }
 }
